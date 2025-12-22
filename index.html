@@ -1,123 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="Css/style.css">
-  <title>Select tile adhesive</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro-Level Adhesive Finder</title>
+    <link rel="stylesheet" href="./Css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
-<body>    
-      <div class="spesification-container" id="spesification-container" >
-        
-         <div class="spesification size">
-         
-          <h1>Tile Size (cm)</h1>
-          <div class="spec-container">
-            <div id="spesification-container">
-              <div class="tile-width">
-                <h2>Tile Width</h2>
-                <input name="tile-width" id="tile-width" type="number" min="10" max="120" placeholder="10-120cm">
-              </div>
+<body>
 
-              <div class="tile-length">
-                <h2>Tile Length</h2>
-                <input name="tile-length" id="tile-length" type="number" min="10" max="120" placeholder="10-120cm">
-              </div>
-              <h2 id="area-result" style="color:rgb(26, 26, 59)"></h2>
-              
-              <div class="thikness">
-              <h2>Tile Thickness</h2>
-              <select name="thickness" id="tile-thickness">
-                <option value="0.5">0.5</option>
-                <option value="0.6-1">0.6-1</option>
-              </select>
-              <div class="next-btn">
-                <button id="size-btn" class="check-btn">Next</button>
-              </div>
-              </div>
-            </div>
-          </div>
+    <div class="glass-container">
+        <div class="progress-container">
+            <div class="progress-bar" id="progress"></div>
         </div>
 
+        <div id="wizard-form">
+            <section class="step active" id="step-1">
+                <h1>Step 1: Tile Dimensions</h1>
+                <div class="input-group">
+                    <label>Width (cm)</label>
+                    <input type="number" id="tile-width" placeholder="e.g. 60">
+                </div>
+                <div class="input-group">
+                    <label>Length (cm)</label>
+                    <input type="number" id="tile-length" placeholder="e.g. 60">
+                </div>
+                <div class="input-group">
+                    <label>Thickness (cm)</label>
+                    <select id="tile-thickness">
+                        <option value="0.5">0.5 cm</option>
+                        <option value="0.6-1">0.6 - 1.0 cm</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button class="btn next" onclick="nextStep(2)">Next Step</button>
+                </div>
+            </section>
 
-        <div class="spesification type">
-          <h1>Tile Type</h1>
-          <div class="specifcation-container">
-            <select name="tile-type-ceramic" id="tile-type-ceramic">
-              <option value="Local Ceramic">Local ceramic</option>
-              <option value="Imported ceramic">Imported ceramic
-              </option> 
-              <option value="Local porcelain">Local porcelain 
-              </option>
-              <option value="Imported porcelain">Imported porcelain 
-              </option>
-            </select>
-            <div class="next-btn">
-              <button class="check-btn" id="type-back">Back</button>
-              <button id="type-btn" class="check-btn ">Next</button>
-            </div>
-          </div>
+            <section class="step" id="step-2">
+                <h1>Step 2: Material</h1>
+                <div class="input-group">
+                    <label>What is the tile made of?</label>
+                    <select id="tile-type">
+                        <option value="Local Ceramic">Local Ceramic</option>
+                        <option value="Imported ceramic">Imported Ceramic</option>
+                        <option value="Local porcelain">Local Porcelain</option>
+                        <option value="Imported porcelain">Imported Porcelain</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button class="btn back" onclick="nextStep(1)">Back</button>
+                    <button class="btn next" onclick="nextStep(3)">Next</button>
+                </div>
+            </section>
+
+            <section class="step" id="step-3">
+                <h1>Step 3: Appearance</h1>
+                <div class="input-group">
+                    <label>Preferred Color Tone</label>
+                    <select id="tile-color">
+                        <option value="Ceramic Near white">Near White</option>
+                        <option value="Ceramic Near black">Near Black</option>
+                        <option value="Porcelain Near white">Porcelain White</option>
+                        <option value="Porcelain Near black">Porcelain Black</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button class="btn back" onclick="nextStep(2)">Back</button>
+                    <button class="btn next" onclick="nextStep(4)">Next</button>
+                </div>
+            </section>
+
+            <section class="step" id="step-4">
+                <h1>Step 4: Environment</h1>
+                <div class="input-group">
+                    <label>Exposure to Water</label>
+                    <select id="exposure">
+                        <option value="Dry room">Dry Room</option>
+                        <option value="Wet room">Wet Room</option>
+                        <option value="Swimming pool">Swimming Pool</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Installation Area</label>
+                    <select id="direction">
+                        <option value="Vertical In House">Wall (Indoor)</option>
+                        <option value="Vertical Outside">Wall (Outdoor)</option>
+                        <option value="Horizontal In House">Floor (Indoor)</option>
+                        <option value="Horizontal Outside">Floor (Outdoor)</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button class="btn back" onclick="nextStep(3)">Back</button>
+                    <button class="btn finish" onclick="calculateResult()">Find Adhesive</button>
+                </div>
+            </section>
+
+            <section class="step" id="results">
+                <h1>Recommended Adhesive</h1>
+                <div id="match-container">
+                    </div>
+                <button class="btn back" onclick="location.reload()">Start Over</button>
+            </section>
         </div>
+    </div>
 
-
-        <div class="spesification color">
-          <h1>Color</h1>
-          <div class="specifcation-container">
-            <select name="tile-color" id="tile-color">
-              <option value="Ceramic Near white">Ceramic Near white
-              </option>
-              <option value="Ceramic Near black">Ceramic Near black
-              </option>
-              <option value="Porcelain Near white">Porcelain Near white
-              </option>
-              <option value="Porcelain Near black">Porcelain Near black
-              </option>
-            </select>
-            <div class="next-btn">
-              <button class="check-btn" id="color-back">Back</button>
-              <button id="color-btn" class="check-btn">Next</button>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="spesification area">
-          <h1>Application area</h1>
-            <h3 id="test-result">Exposure to water</h3>
-            <select name="exposure-to-water" id="exposure-to-water">
-              <option value="Dry room">Dry room</option>
-              <option value="Wet room">Wet room</option>
-              <option value="Swimming pool">Swimming pool</option>
-            </select>
-            <div class="next-btn">
-              <button class="check-btn" id="area-back">Back</button>
-              <button id="area-btn" class="check-btn">Next</button>
-            </div>
-        </div>    
-
-        <div class="spesification area-direction">    
-            <div id="application-area" class="application-area">
-              <h1>Application area direction</h1>
-             
-              <!-- <button id="vertical-btn" class="dir-btn">Vertical</button><br> -->
-              <select name="horizontal" id="direction">
-                <option value="Vertical In House">Vertical In house</option>
-                <option value="Vertical Outside">Vertical Outside</option>
-                <option value="Horizontal In House">Horizontal In house</option>
-                <option value="Horizontal Outside">Horizontal Outside</option>
-              </select>
-            </div>
-            <div class="next-btn">
-              <button class="check-btn" id="direction-back">Back</button>
-              <button id="result-viewer" class="check-btn">Next</button>
-            </div>
-          </div>
-        </div>
-        <script src="JavaScript/data.js"></script>
-      <script src="JavaScript/script.js"></script>
+    <script src="./JavaScript/data.js"></script>
+    <script src="./JavaScript/script.js"></script>
 </body>
 </html>
-
-
-
-
