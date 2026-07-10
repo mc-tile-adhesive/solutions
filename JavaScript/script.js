@@ -57,7 +57,7 @@ function displayResults(matches) {
     // Use .map() to transform those 2 objects into HTML strings
     const htmlContent = matches.slice(0, 2).map((item, index) => {
         // Adding a "Top Choice" badge to the very first item
-        const badge = index === 0 ? '<span class="badge">Top Choice</span>' : '';
+        const badge = index === 0 ? '<span class="badge" style="color:rgb(0,158,234);>Top Choice</span>' : '';
         
         return `
             <div class="result-card">
