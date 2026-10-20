@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tile Adhesive Selector - MC</title>
+    <!-- Tailwind CSS for modern layout & styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        mc: {
+                            blue: '#00aeef',
+                            lightBlue: '#008dcc',
+                            accent: '#143c6d',
+                            green: '#143c6d',
+                            lightGreen: '#00aeef'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col justify-between font-sans">
+
+    <!-- TOP HEADER -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <!-- MC Logo with Image and Fallback SVG Badge -->
+                <div> 
+                    <img src="logo.png" alt="MC Logo" class="logo" onerror="this.onerror=null;">
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-slate-900 leading-tight">Tile Adhesive Selector</h1>
+                    <p class="text-xs text-slate-500 font-medium">Find the exact adhesive match for your tile specs</p>
+                </div>
+            </div>
+            <!-- Run Indicator Badge -->
+            <div id="runBadge" class="hidden sm:inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-mc-lightBlue border border-blue-200">
+                <span class="w-2 h-2 rounded-full bg-mc-lightBlue mr-2 animate-pulse"></span>
+                <span id="runBadgeText">Run #1</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN WRAPPER WITH 2-COLUMN LAYOUT -->
+    <main class="max-w-6xl mx-auto w-full px-4 py-6 flex-grow">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- RIGHT SIDE: STEP-BY-STEP WIZARD CONTAINER -->
+            <section class="lg:col-span-8">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+
+                    <!-- Progress Bar -->
+                    <div class="mb-8">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold text-mc-lightBlue uppercase tracking-wider" id="stepIndicatorText">Step 1 of 6</span>
+                            <span class="text-xs font-semibold text-slate-500" id="progressPercentageText">16%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                            <div id="progressFill" class="bg-mc-lightBlue h-2.5 rounded-full transition-all duration-300 ease-out" style="width: 16.66%"></div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 1: TILE TYPE -->
+                    <div class="step-slide active" id="step-1">
+                        <h2 class="text-2xl font-bold text-slate-900 mb-2">1. Select Tile Type</h2>
+                        <p class="text-slate-500 text-sm mb-6">Choose the material composition of the tile you plan to install.</p>
+                        <div class="space-y-4">
+                            <label for="tileType" class="block text-sm font-semibold text-slate-700">Tile Material Category</label>
+                            <select id="tileType" class="w-full p-3.5 border-2 border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:border-mc-lightBlue focus:ring-2 focus:ring-blue-100 text-slate-800 transition outline-none" onchange="handleSelectChange('tileType')">
+                                <option value="" disabled selected>-- Select Tile Type --</option>
+                                <option value="Local Ceramic">Local Ceramic</option>
+                                <option value="Imported ceramic">Imported ceramic</option>
+                                <option value="Local Porcelain">Local Porcelain</option>
+                                <option value="Imported porcelain">Imported porcelain</option>
+                            </select>
+                        </div>
+                        <div class="mt-8 flex justify-end">
+                            <button class="bg-mc-lightBlue hover:bg-mc-blue text-white font-semibold px-6 py-3 rounded-xl transition shadow-md shadow-blue-200 flex items-center" onclick="nextStep(1)">
+                                Next Step
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: TILE COLOR -->
+                    <div class="step-slide" id="step-2">
+                        <h2 class="text-2xl font-bold text-slate-900 mb-2">2. Select Tile Color Tone</h2>
+                        <p class="text-slate-500 text-sm mb-6">Tile pigment shade determines white cement adhesive requirements to avoid staining.</p>
+                        <div class="space-y-4">
+                            <label for="tileColor" class="block text-sm font-semibold text-slate-700">Tile Color Specification</label>
+                            <select id="tileColor" class="w-full p-3.5 border-2 border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:border-mc-lightBlue focus:ring-2 focus:ring-blue-100 text-slate-800 transition outline-none" onchange="handleSelectChange('tileColor')">
+                                <option value="" disabled selected>-- Select Tile Color --</option>
+                                <option value="Ceramic Near black">Ceramic Near black</option>
+                                <option value="Ceramic Near white">Ceramic Near white</option>
+                                <option value="Porcelain Near black">Porcelain Near black</option>
+                                <option value="Porcelain Near white">Porcelain Near white</option>
+                            </select>
+                        </div>
+                        <div class="mt-8 flex justify-between">
+                            <button class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-6 py-3 rounded-xl transition" onclick="prevStep(2)">Back</button>
+                            <button class="bg-mc-lightBlue hover:bg-mc-blue text-white font-semibold px-6 py-3 rounded-xl transition shadow-md shadow-blue-200 flex items-center" onclick="nextStep(2)">
+                                Next Step
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: TILE DIMENSIONS -->
+                    <div class="step-slide" id="step-3">
+                        <h2 class="text-2xl font-bold text-slate-900 mb-2">3. Tile Width and Length</h2>
+                        <p class="text-slate-500 text-sm mb-6">Enter the width and length of your tile in centimeters (cm).</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label for="tileWidth" class="block text-sm font-semibold text-slate-700">Width (cm)</label>
+                                <input type="number" id="tileWidth" placeholder="e.g. 40" min="0.1" step="any" class="w-full p-3.5 border-2 border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:border-mc-lightBlue focus:ring-2 focus:ring-blue-100 text-slate-800 transition outline-none" oninput="handleSelectChange('tileWidth')">
+                            </div>
+                            <div class="space-y-2">
+                                <label for="tileLength" class="block text-sm font-semibold text-slate-700">Length (cm)</label>
+                                <input type="number" id="tileLength" placeholder="e.g. 60" min="0.1" step="any" class="w-full p-3.5 border-2 border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:border-mc-lightBlue focus:ring-2 focus:ring-blue-100 text-slate-800 transition outline-none" oninput="handleSelectChange('tileLength')">
+                            </div>
+                        </div>
+                        <div class="mt-8 flex justify-between">
+                            <button class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-6 py-3 rounded-xl transition" onclick="prevStep(3)">Back</button>
+                            <button class="bg-mc-lightBlue hover:bg-mc-blue text-white font-semibold px-6 py-3 rounded-xl transition shadow-md shadow-blue-200 flex items-center" onclick="nextStep(3)">
+                                Next Step
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 4: TILE THICKNESS -->
+                    <div class="step-slide" id="step-4">
+                        <h2 class="text-2xl font-bold text-slate-900 mb-2">4. Tile Thickness</h2>
+                        <p class="text-slate-500 text-sm mb-6">Specify the depth/thickness range of your tile.</p>
+                        <div class="space-y-4">
+                            <label for="tileThickness" class="block text-sm font-semibold text-slate-700">Thickness Category</label>
+                            <select id="tileThickness" class="w-full p-3.5 border-2 border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:border-mc-lightBlue focus:ring-2 focus:ring-blue-100 text-slate-800 transition outline-none" onchange="handleSelectChange('tileThickness')">
+                                <option value="" disabled selected>-- Select Thickness Range --</option>
+                                <option value="0.5">0.5 cm</option>
+                                <option value="0.6-1">0.6 - 1 cm</option>
+                            </select>
+                        </div>
+                        <div class="mt-8 flex justify-between">
+                            <button class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-6 py-3 rounded-xl transition" onclick="prevStep(4)">Back</button>
+                            <button class="bg-mc-lightBlue hover:bg-mc-blue text-white font-semibold px-6 py-3 rounded-xl transition shadow-md shadow-blue-200 flex items-center" onclick="nextStep(4)">
+                                Next Step
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 5: WATER EXPOSURE -->
+                    <div class="step-slide" id="step-5">
+                        <h2 class="text-2xl font-bold text-slate-900 mb-2">5. Moisture & Water Exposure</h2>
+                        <p class="text-slate-500 text-sm mb-6">Select the environment condition where tiles are laid.</p>
+                        <div class="space-y-4">
+                            <label for="exposureToWater" class="block text-sm font-semibold text-slate-700">Water Exposure</label>
+                            <select id="exposureToWater" class="w-full p-3.5 border-2 border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:border-mc-lightBlue focus:ring-2 focus:ring-blue-100 text-slate-800 transition outline-none" onchange="handleSelectChange('exposureToWater')">
+                                <option value="" disabled selected>-- Select Exposure Area --</option>
+                                <option value="Dry room">Dry room</option>
+                                <option value="Wet room">Wet room</option>
+                                <option value="Swimming pool">Swimming pool</option>
+                            </select>
+                        </div>
+                        <div class="mt-8 flex justify-between">
+                            <button class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-6 py-3 rounded-xl transition" onclick="prevStep(5)">Back</button>
+                            <button class="bg-mc-lightBlue hover:bg-mc-blue text-white font-semibold px-6 py-3 rounded-xl transition shadow-md shadow-blue-200 flex items-center" onclick="nextStep(5)">
+                                Next Step
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 6: DIRECTION / LOCATION -->
+                    <div class="step-slide" id="step-6">
+                        <h2 class="text-2xl font-bold text-slate-900 mb-2">6. Installation Orientation</h2>
+                        <p class="text-slate-500 text-sm mb-6">Choose whether the installation is horizontal (floor) or vertical (wall), inside or outside.</p>
+                        <div class="space-y-4">
+                            <label for="direction" class="block text-sm font-semibold text-slate-700">Installation Orientation</label>
+                            <select id="direction" class="w-full p-3.5 border-2 border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:border-mc-lightBlue focus:ring-2 focus:ring-blue-100 text-slate-800 transition outline-none" onchange="handleSelectChange('direction')">
+                                <option value="" disabled selected>-- Select Direction & Location --</option>
+                                <option value="Horizontal In House">Horizontal In House</option>
+                                <option value="Vertical In House">Vertical In House</option>
+                                <option value="Horizontal Outside">Horizontal Outside</option>
+                                <option value="Vertical Outside">Vertical Outside</option>
+                            </select>
+                        </div>
+                        <div class="mt-8 flex justify-between">
+                            <button class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-6 py-3 rounded-xl transition" onclick="prevStep(6)">Back</button>
+                            <button class="bg-mc-green hover:bg-emerald-700 text-white font-semibold px-8 py-3.5 rounded-xl transition shadow-lg shadow-green-200 flex items-center" onclick="nextStep(6)">
+                                View Recommendations
+                                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 7: RESULTS PAGE -->
+                    <div class="step-slide" id="step-7">
+                        <div class="border-b border-slate-100 pb-4 mb-6">
+                            <h2 class="text-2xl font-extrabold text-slate-900">Recommended Adhesives</h2>
+                            <p class="text-slate-500 text-sm">Matching products based on your specific requirements.</p>
+                        </div>
+
+                        <div id="resultsContainer" class="space-y-5">
+                            <!-- Injected dynamically -->
+                        </div>
+                        <!-- Action Buttons -->
+                        <div class="mt-8 flex flex-col sm:flex-row justify-between gap-4">
+                            <button class="w-full sm:w-auto bg-slate-800 hover:bg-slate-900 text-white font-semibold px-6 py-3.5 rounded-xl transition flex items-center justify-center shadow-md" onclick="resetApp()">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                Start Over (Run #<span id="nextRunNumBtn">2</span>)
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+        
+            <!-- LEFT SIDE: SELECTED CRITERIA SUMMARY SIDEBAR -->
+            <aside class="lg:col-span-4 space-y-4">
+                <!-- Current Run Choices Card -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm sticky top-20">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                        <h2 class="text-base font-bold text-slate-800 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-mc-lightBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 002-2h2a2 2 0 002 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                            Live Selection Summary
+                        </h2>
+                        <span id="summaryCounter" class="text-xs font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">0/6 Completed</span>
+                    </div>
+
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex justify-between items-start py-1 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">1. Tile Type:</span>
+                            <span id="summary-tileType" class="font-semibold text-slate-800 text-right text-slate-400 italic">Not selected</span>
+                        </li>
+                        <li class="flex justify-between items-start py-1 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">2. Tile Color:</span>
+                            <span id="summary-tileColor" class="font-semibold text-slate-800 text-right text-slate-400 italic">Not selected</span>
+                        </li>
+                        <li class="flex justify-between items-start py-1 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">3. Tile Dimensions:</span>
+                            <span id="summary-tileDimensions" class="font-semibold text-slate-800 text-right text-slate-400 italic">Not selected</span>
+                        </li>
+                        <li class="flex justify-between items-start py-1 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">4. Thickness:</span>
+                            <span id="summary-tileThickness" class="font-semibold text-slate-800 text-right text-slate-400 italic">Not selected</span>
+                        </li>
+                        <li class="flex justify-between items-start py-1 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">5. Water Exposure:</span>
+                            <span id="summary-exposureToWater" class="font-semibold text-slate-800 text-right text-slate-400 italic">Not selected</span>
+                        </li>
+                        <li class="flex justify-between items-start py-1">
+                            <span class="text-slate-500 font-medium">6. Direction:</span>
+                            <span id="summary-direction" class="font-semibold text-slate-800 text-right text-slate-400 italic">Not selected</span>
+                        </li>
+                    </ul>
+
+                    <!-- Previous successful matches -->
+                    <div id="previousRunList" class="hidden mt-6 pt-4 border-t-2 border-dashed border-slate-200 space-y-3" aria-live="polite">
+                    </div>
+                </div>
+            </aside>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-8 text-center text-xs text-slate-500" style="font-size: 1rem;">
+        &copy; 2026 MC-Bauchemie <strong>Ethiopia</strong>. All rights reserved. Professional Tile Adhesive Selector Tool.
+    </footer>
+
+    <!-- LOGIC SCRIPT -->
+     <script src="products.js"></script>
+    <script src="script1.js"></script>
+</body>
+</html>
